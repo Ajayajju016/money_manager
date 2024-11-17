@@ -1,23 +1,80 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import TransactionForm from "./components/TransactionForm";
+import TransactionList from "./components/TransactionList";
+
+import './App.css'
 
 function App() {
+  const [transactions, setTransactions] = useState([]);
+
+  // Load transactions from localStorage when the app initializes
+  useEffect(() => {
+    const storedTransactions = localStorage.getItem("transactions");
+    if (storedTransactions) {
+      setTransactions(JSON.parse(storedTransactions));
+    }
+  }, []);
+
+  // Save transactions to localStorage whenever transactions change
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }, [transactions]);
+
+  // Function to add a new transaction
+  const addTransaction = (transaction) => {
+    setTransactions([...transactions, transaction]);
+  };
+
+  // Function to delete a transaction by index
+  const deleteTransaction = (index) => {
+    const newTransactions = transactions.filter((_, i) => i !== index);
+    setTransactions(newTransactions);
+  };
+
+  // Calculate summary amounts
+  const totalReceived = transactions
+    .filter((t) => t.status === "Received")
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const totalYetToReceive = transactions
+    .filter((t) => t.status === "Yet to Receive")
+    .reduce((acc, t) => acc + t.amount, 0);
+
+  const totalToSend = transactions
+    .filter((t) => t.status === "Sent money")
+    .reduce((acc, t) => acc + t.amount, 0);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h2>Money Manager</h2>
+
+      <div className="navbar"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "10px",
+          backgroundColor: "#f0f0f3",
+          borderRadius: "8px",
+          marginBottom: "20px",
+        }}
+      >
+        <div>
+          <strong>Total Received:</strong> ₹{totalReceived}
+        </div>
+        <div>
+          <strong>Yet to Receive:</strong> <strong className="yettoreceive">₹{totalYetToReceive}</strong>
+        </div>
+        <div>
+          <strong>Sent money:</strong> ₹{totalToSend}
+        </div>
+      </div>
+
+      <TransactionForm addTransaction={addTransaction} />
+      <h3>Transaction List</h3>
+      <TransactionList
+        transactions={transactions}
+        deleteTransaction={deleteTransaction}
+      />
     </div>
   );
 }
