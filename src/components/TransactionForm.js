@@ -81,7 +81,7 @@ function TransactionForm({ addTransaction }) {
         >
           <option value="Sent money">Sent money</option>
           <option value="Received">Received</option>
-          <option value="Yet to Receive">Yet to Receive</option>
+          {/* <option value="Yet to Receive">Yet to Receive</option> */}
         </select>
       </div>
 
@@ -92,7 +92,6 @@ function TransactionForm({ addTransaction }) {
           placeholder="Enter purpose"
           value={purpose}
           onChange={(e) => setPurpose(e.target.value)}
-          required
           className="input"
         />
       </div>
@@ -103,5 +102,6 @@ function TransactionForm({ addTransaction }) {
     </form>
   );
 }
+
 
 export default TransactionForm;

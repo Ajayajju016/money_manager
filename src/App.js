@@ -36,9 +36,9 @@ function App() {
     .filter((t) => t.status === "Received")
     .reduce((acc, t) => acc + t.amount, 0);
 
-  const totalYetToReceive = transactions
-    .filter((t) => t.status === "Yet to Receive")
-    .reduce((acc, t) => acc + t.amount, 0);
+  // const totalYetToReceive = transactions
+  //   .filter((t) => t.status === "Yet to Receive")
+  //   .reduce((acc, t) => acc + t.amount, 0);
 
   const totalToSend = transactions
     .filter((t) => t.status === "Sent money")
@@ -59,13 +59,13 @@ function App() {
         }}
       >
         <div>
-          <strong>Total Received:</strong> ₹{totalReceived}
+          <strong>Total Received:</strong> <strong className="received">₹{totalReceived}</strong>
         </div>
-        <div>
+        {/* <div>
           <strong>Yet to Receive:</strong> <strong className="yettoreceive">₹{totalYetToReceive}</strong>
-        </div>
+        </div> */}
         <div>
-          <strong>Sent money:</strong> ₹{totalToSend}
+          <strong>Sent money:</strong> <strong className="sent">₹{totalToSend}</strong>
         </div>
       </div>
 

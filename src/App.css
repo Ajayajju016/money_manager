@@ -5,7 +5,7 @@
   max-width: 700px;
   margin: auto;
   width: 100vw;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 .navbar{
@@ -17,8 +17,11 @@
   margin-bottom: 20px
 }
 
-.yettoreceive{
+.sent{
   color: rgb(181, 4, 4);
+}
+.received{
+  color: #45a049;
 }
 
 .input{
