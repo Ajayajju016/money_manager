@@ -48,16 +48,7 @@ function App() {
     <div className="app">
       <h2>Money Manager</h2>
 
-      <div className="navbar"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px",
-          backgroundColor: "#f0f0f3",
-          borderRadius: "8px",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="navbar">
         <div>
           <strong>Total Received:</strong> <strong className="received">₹{totalReceived}</strong>
         </div>

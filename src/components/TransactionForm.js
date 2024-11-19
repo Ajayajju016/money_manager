@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import '../App.css';
 
 function TransactionForm({ addTransaction }) {
@@ -8,11 +7,12 @@ function TransactionForm({ addTransaction }) {
   const [transactionDate, setTransactionDate] = useState("");
   const [status, setStatus] = useState("Sent money");
   const [purpose, setPurpose] = useState("");
+  const [mode, setMode] = useState("PhonePe");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name || !amount || !transactionDate || !purpose) {
+    if (!name || !amount || !transactionDate || !purpose || !mode) {
       alert("Please fill out all fields");
       return;
     }
@@ -23,6 +23,7 @@ function TransactionForm({ addTransaction }) {
       transactionDate,
       status,
       purpose,
+      mode,
     };
 
     addTransaction(newTransaction);
@@ -33,6 +34,7 @@ function TransactionForm({ addTransaction }) {
     setTransactionDate("");
     setStatus("Sent money");
     setPurpose("");
+    setMode("PhonePe");
   };
 
   return (
@@ -81,7 +83,6 @@ function TransactionForm({ addTransaction }) {
         >
           <option value="Sent money">Sent money</option>
           <option value="Received">Received</option>
-          {/* <option value="Yet to Receive">Yet to Receive</option> */}
         </select>
       </div>
 
@@ -96,12 +97,24 @@ function TransactionForm({ addTransaction }) {
         />
       </div>
 
-      <button type="submit" style={{padding: "10px",borderRadius:"7px"}}>
+      <div style={{ marginBottom: "10px" }}>
+        <label>Mode of Transaction:</label>
+        <select
+          value={mode}
+          onChange={(e) => setMode(e.target.value)}
+          className="input"
+        >
+          <option value="PhonePe">PhonePe</option>
+          <option value="GPay">GPay</option>
+          <option value="Cred">Cred</option>
+        </select>
+      </div>
+
+      <button type="submit" style={{ padding: "10px", borderRadius: "7px" }}>
         Add Entry
       </button>
     </form>
   );
 }
-
 
 export default TransactionForm;
