@@ -1,44 +1,50 @@
 import React, { useState, useEffect } from "react";
 import TransactionForm from "./components/TransactionForm";
 import TransactionList from "./components/TransactionList";
+import { getTransactions, addTransaction, deleteTransaction } from "./api";
 
-import './App.css'
+import './App.css';
 
 function App() {
   const [transactions, setTransactions] = useState([]);
 
-  // Load transactions from localStorage when the app initializes
+  // Fetch transactions on component mount
   useEffect(() => {
-    const storedTransactions = localStorage.getItem("transactions");
-    if (storedTransactions) {
-      setTransactions(JSON.parse(storedTransactions));
-    }
+    const fetchTransactions = async () => {
+      try {
+        const data = await getTransactions();
+        setTransactions(data);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+    fetchTransactions();
   }, []);
 
-  // Save transactions to localStorage whenever transactions change
-  useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
-
-  // Function to add a new transaction
-  const addTransaction = (transaction) => {
-    setTransactions([...transactions, transaction]);
+  // Function to handle adding a transaction
+  const handleAddTransaction = async (newTransaction) => {
+    try {
+      const savedTransaction = await addTransaction(newTransaction);
+      setTransactions((prevTransactions) => [...prevTransactions, savedTransaction]);
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+    }
   };
 
-  // Function to delete a transaction by index
-  const deleteTransaction = (index) => {
-    const newTransactions = transactions.filter((_, i) => i !== index);
-    setTransactions(newTransactions);
+  // Function to handle deleting a transaction
+  const handleDeleteTransaction = async (id) => {
+    try {
+      await deleteTransaction(id);
+      setTransactions((prevTransactions) => prevTransactions.filter((t) => t.id !== id));
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
   };
 
   // Calculate summary amounts
   const totalReceived = transactions
     .filter((t) => t.status === "Received")
     .reduce((acc, t) => acc + t.amount, 0);
-
-  // const totalYetToReceive = transactions
-  //   .filter((t) => t.status === "Yet to Receive")
-  //   .reduce((acc, t) => acc + t.amount, 0);
 
   const totalToSend = transactions
     .filter((t) => t.status === "Sent money")
@@ -52,19 +58,16 @@ function App() {
         <div>
           <strong>Total Received:</strong> <strong className="received">₹{totalReceived}</strong>
         </div>
-        {/* <div>
-          <strong>Yet to Receive:</strong> <strong className="yettoreceive">₹{totalYetToReceive}</strong>
-        </div> */}
         <div>
           <strong>Sent money:</strong> <strong className="sent">₹{totalToSend}</strong>
         </div>
       </div>
 
-      <TransactionForm addTransaction={addTransaction} />
+      <TransactionForm addTransaction={handleAddTransaction} />
       <h3>Transaction List</h3>
       <TransactionList
         transactions={transactions}
-        deleteTransaction={deleteTransaction}
+        deleteTransaction={handleDeleteTransaction}
       />
     </div>
   );
