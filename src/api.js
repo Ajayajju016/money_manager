@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://money-manager-backend-13wq.onrender.com";
+const API_URL = "https://money-manager-backend-13wq.onrender.com/api/transactions";
 
 export const getTransactions = async () => {
   const response = await axios.get(API_URL);
