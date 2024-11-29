@@ -44,7 +44,7 @@ function TransactionList({ transactions, deleteTransaction })
               </td>
               <td style={{ border: "1px solid #ddd", padding: "10px" }}>
                 <button
-                  onClick={() => deleteTransaction(index)}
+                  onClick={() => deleteTransaction(transaction.id)}
                   style={{
                     padding: "5px 10px",
                     border: "none",
